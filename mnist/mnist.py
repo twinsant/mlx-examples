@@ -34,6 +34,10 @@ def mnist(
         mnist = {}
         for name in filename:
             out_file = os.path.join("/tmp", name[1])
+            # If file already exists, skip download
+            if os.path.exists(out_file):
+                # print(f"File {out_file} already exists, skipping download")
+                continue
             request.urlretrieve(base_url + name[1], out_file)
         for name in filename[:2]:
             out_file = os.path.join("/tmp", name[1])
