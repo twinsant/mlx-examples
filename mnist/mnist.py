@@ -9,7 +9,7 @@ import numpy as np
 
 
 def mnist(
-    save_dir="/tmp",
+    save_dir=os.path.join(os.path.dirname(os.path.abspath(__file__)), "data"),
     base_url="https://raw.githubusercontent.com/fgnt/mnist/master/",
     filename="mnist.pkl",
 ):
@@ -33,20 +33,20 @@ def mnist(
 
         mnist = {}
         for name in filename:
-            out_file = os.path.join("/tmp", name[1])
+            out_file = os.path.join(save_dir, name[1])
             # If file already exists, skip download
             if os.path.exists(out_file):
                 # print(f"File {out_file} already exists, skipping download")
                 continue
             request.urlretrieve(base_url + name[1], out_file)
         for name in filename[:2]:
-            out_file = os.path.join("/tmp", name[1])
+            out_file = os.path.join(save_dir, name[1])
             with gzip.open(out_file, "rb") as f:
                 mnist[name[0]] = np.frombuffer(f.read(), np.uint8, offset=16).reshape(
                     -1, 28 * 28
                 )
         for name in filename[-2:]:
-            out_file = os.path.join("/tmp", name[1])
+            out_file = os.path.join(save_dir, name[1])
             with gzip.open(out_file, "rb") as f:
                 mnist[name[0]] = np.frombuffer(f.read(), np.uint8, offset=8)
         with open(save_file, "wb") as f:
@@ -71,7 +71,7 @@ def mnist(
     )
 
 
-def fashion_mnist(save_dir="/tmp"):
+def fashion_mnist(save_dir=os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")):
     return mnist(
         save_dir,
         base_url="http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/",
